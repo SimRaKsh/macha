@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magic Letter</title>
+<style>
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: white;
+  font-family: 'Arial', sans-serif;
+  user-select: none;
+
+}
+
+/* Envelope container */
+#envelope-container {
+  position: relative;
+   /* 🩷 Made bigger */
+   /* 🩷 Made bigger */
+  width: 800px;
+height: 500px;
+  cursor: pointer;
+}
+
+/* Envelope */
+#envelope {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* 🩷 Makes sure image fits nicely */
+  display: block;
+  transition: opacity 0.5s ease;
+  z-index: 1;
+}
+
+/* Letter */
+#letter {
+  width: 500px; /* 🩷 Made proportionally larger */
+  min-height: 320px;
+  background: #f2e6d7;
+  border-radius: 20px;
+  padding: 30px;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%; /* 🩷 Centered perfectly */
+  transform: translate(-50%, 50%) scale(0);
+  opacity: 0;
+  font-size: 26px;
+  font-family: 'Dancing Script', cursive;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+
+  
+  /* Inner shadow for soft, cute look */
+  box-shadow: inset 0 0 10px rgba(255,182,193,0.4),
+              0 0 15px rgba(240,128,128,0.3);
+  
+  transition: transform 1s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+              opacity 0.8s;
+}
+
+.slide {
+  display: none;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.active {
+  display: block;
+}
+
+.left-align {
+  text-align: left;
+  padding-left: 30px;
+}
+
+
+#buttons {
+  margin-top: 20px;
+}
+
+button {
+  padding: 12px 25px;
+  margin: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  background: #f08080;
+  color: white;
+  font-size: 18px;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #ff4c4c;
+}
+
+/* 🩷 Bouquet image made bigger and cuter */
+#bouquet {
+  width: 150px; 
+  margin: 30px auto;
+  transition: transform 0.4s ease;
+}
+#bouquet:hover {
+  transform: scale(1.1); /* subtle hover pop */
+}
+</style>
+</head>
+<body style="color: #f08080;">
+
+<div id="envelope-container">
+  <!-- 🩷 Larger envelope image -->
+  <img id="envelope" src="en2.png" alt="💌">
+
+  <div id="letter">
+    <div class="slide active" id="slide1"><p style="font-size: x-small;">05.10.2025</p><h3>Happy Boyfriend Day!!</h3> Haha I know its kinda late but it's okay everyday is our day. </div>
+    <div class="slide left-align" id="slide2"><h3>Dear Love,</h3><p style="font-size: small;">Happy Boyfriend Day, my love I want to take a moment to celebrate you, the incredible man whow makes my world so much brighter. Every day with you feels special, and today I just want to remind you how thankful I am for your love, you kindness, and everything that makes you uniquely you.<br> You are my happiness, my peace, and my greatest joy. The way you light up my life is beyond words. I feel so lucky to have you by my side, and I promise to always cherish and support you, no matter what. Thank you for being the most beautiful part of my life</p></div>
+    <div class="slide" id="slide3">
+      <img id="bouquet" src="bp.png" alt="Bouquet"><br>A bouquet for this beautiful soul !!
+    </div>
+    <div class="slide" id="slide4">
+      Will you go on a date?
+      <div id="buttons">
+        <button id="yes">Yes</button>
+        <button id="no">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const envelope = document.getElementById('envelope');
+const letter = document.getElementById('letter');
+const slides = document.querySelectorAll('.slide');
+let currentSlide = 0;
+
+// Click envelope to reveal letter
+envelope.addEventListener('click', () => {
+  envelope.style.opacity = 0; // envelope disappears
+  letter.style.opacity = 1;
+  letter.style.transform = 'translate(-50%, -50%) scale(1)';
+});
+
+// Click letter to go to next slide
+letter.addEventListener('click', (e) => {
+  if(e.target.tagName.toLowerCase() === 'button') return; // skip buttons
+  if(currentSlide < slides.length - 1){
+    slides[currentSlide].classList.remove('active');
+    currentSlide++;
+    slides[currentSlide].classList.add('active');
+  }
+});
+
+// Yes button closes the letter
+document.getElementById('yes').addEventListener('click', () => {
+  letter.style.transform = 'translate(-50%, 50%) scale(0)';
+  letter.style.opacity = 0;
+  currentSlide = 0;
+  slides.forEach((s,i)=>{
+    s.classList.remove('active');
+    if(i===0) s.classList.add('active');
+  });
+  envelope.style.opacity = 1; // envelope comes back
+});
+
+const noBtn = document.getElementById('no');
+const yesBtn = document.getElementById('yes');
+
+noBtn.addEventListener('click', () => {
+  // Hide No button
+  noBtn.style.display = 'none';
+  const secondYes = yesBtn.cloneNode(true);
+  secondYes.id = 'yes2';
+  document.getElementById('buttons').appendChild(secondYes);
+  // Create the "Really?" text
+  const reallyText = document.createElement('p');
+  reallyText.textContent = 'Really NO?';
+  reallyText.style.color = '#f08080';
+  reallyText.style.fontSize = '24px';
+  reallyText.style.marginTop = '20px';
+  reallyText.style.opacity = '0';
+  document.getElementById('buttons').appendChild(reallyText);
+  
+  // Fade-in animation
+  setTimeout(() => {
+    reallyText.style.transition = 'opacity 0.6s';
+    reallyText.style.opacity = '1';
+  }, 50);
+  
+
+  // Add same function as the original Yes button
+  secondYes.addEventListener('click', () => {
+    letter.style.transform = 'translateY(50%) scale(0)';
+    letter.style.opacity = 0;
+    currentSlide = 0;
+    slides.forEach((s, i) => {
+      s.classList.remove('active');
+      if (i === 0) s.classList.add('active');
+    });
+    envelope.style.opacity = 1;
+  });
+});
+
+</script>
+
+</body>
+</html>
